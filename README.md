@@ -1,7 +1,8 @@
-# Cat Clicker #
+# Neighborhood Map #
 
-[view here](https://summerohoh.github.io/catclicker/index.html)
+Airbnb-inspired Neighborhood Map of Ithaca.
 
-A simple game where you click on five different cats. Meow!
+* Google Map API
+* Knockout JS
 
-Constructed with Javascript(jQuery.js) + MV* framework
+[view here](https://summerohoh.github.io/map-project/index.html)
