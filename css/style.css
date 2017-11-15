@@ -1,53 +1,62 @@
-html,body{
-	width: 100%;
-	overflow: hidden;
-	text-decoration: none;
-	text-align: center;
-	margin:0;
-}
+html,
+	body{
+		font-family: Arial, sans-serif;
+		height: 100%;
+		margin:0;
+		padding:0;
+	}
 
-.sidebar{
-	height:100%;
-	width:25%;
-	color:#000!important;
-	background-color:#f1f1f1!important;
-	position:fixed!important;
-	z-index:1;
-	overflow:hidden;
-}
+	.topbar{
+		height: 50px;
+		width: 100%;
+		z-index: 2;
+		overflow: hidden;
+		background: #fff;
+		position: fixed;
+		border-bottom: solid 1px #f1f1f1;
+	}
 
-ul{
-	-webkit-padding-start: 0px;
-}
+	.sidebar{
+		height:100%;
+		width:30%;
+		color:#000!important;
+		background-color:#f1f1f1!important;
+		position:fixed!important;
+		z-index:1;
+		overflow:hidden;
+		top: 50px;
+		text-align: center;
+    	border-right: solid 1px #f1f1f1;
+	}
 
-.bar-block .bar-item{
-	width:100%;
-	display:block;
-	padding:20px 0;
-	text-align:center;
-	border:none;
-	outline:none;
-}
+	.map-container{
+		height: 100%;
+    width: 70%;
+    float: right;
+	}
 
-.button{
-	overflow:hidden;
-	text-decoration:none;
-	cursor:pointer;
-	color: inherit;
-	font-size: 20px;
-}
+	#map{
+		height: 100%;
+		z-index: 0;
+	}
 
-.button:hover{
-	color:#000!important;
-	background-color:#ccc!important;
-}
+	ul.list-items{
+		list-style: none;
+		text-align: left;
+		-webkit-padding-start:0;
+	}
 
-.container{
-	margin-left: 25%;
-}
+	.list-items >li:hover{
+		background-color: #fff;
+		cursor: default;
+	}
 
-#cat-image{
-	max-width: 90%;
-	height: auto;
-}
+	.list-items >li{
+		line-height: 50px;
+		width: 100%;
+		padding-left: 50px;
+	}
 
+	.selected{
+		background-color: #fff;
+	}
