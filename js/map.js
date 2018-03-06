@@ -135,7 +135,7 @@ function makeInfoWindows(marker, infowindow){
 client_id = 'PLI5CCYKVLMH141OJGJRF1PSVAFOPOE5GKQFXXM0WTX1XOS1';
 client_secret='Q1C5LMJZ0KOQJKGKDJB4UKVC5FURTRJ1O4J3WXPZ4MXG2XW5';
 
-function foursquare(marker){
+function foursquare(marker){ 
 
   var location =[];
   var lat = marker.getPosition().lat();
@@ -146,8 +146,7 @@ function foursquare(marker){
   URL += '&client_secret=' + client_secret;
   URL += '&ll=' + lat + ',' + lng; 
   URL += '&query=' + marker.name;
-  URL += '&v=20180306'
-  URL += '&callback=?';
+  URL += '&v=20180306';
 
   $.getJSON(URL, function(data) {
     var results =data.response.venues[0];
