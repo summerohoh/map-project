@@ -14,6 +14,14 @@ html,
 		background: #fff;
 		position: fixed;
 		border-bottom: solid 1px #f1f1f1;
+		padding-left: 30px;
+	}
+
+	input[type="search"]{
+	  -webkit-appearance:none;
+	  outline-width: 0;
+	  font-weight: 400;
+	  font-size: 20px;
 	}
 
 	.sidebar{
@@ -27,6 +35,11 @@ html,
 		top: 50px;
 		text-align: center;
     	border-right: solid 1px #f1f1f1;
+	}
+
+	input#search{
+		height: 100%;
+		border: none;
 	}
 
 	.map-container{
@@ -59,4 +72,13 @@ html,
 
 	.selected{
 		background-color: #fff;
+	}
+
+	.notselected{
+		background-color: #f1f1f1;
+	}
+
+	#page-title{
+		width: 100%;
+		font-size: 30px;
 	}
