@@ -152,6 +152,7 @@ function foursquare(marker){
   $.getJSON(URL, function(data) {
     var results =data.response.venues[0];
     location = [{location_id: results.id}];
+    console.log(location);
   }).fail(function() {
     alert("Error with Foursquare API call");
   });
