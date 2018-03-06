@@ -73,6 +73,7 @@ function createMarker(position,name, i){
                animation: google.maps.Animation.DROP,
                id: i,
              });
+          
           //push the marker to markers array
           markers.push(marker);
           //make infowindow for each markers
@@ -120,9 +121,8 @@ function makeInfoWindows(marker, infowindow){
           //make sure the infowindow is not open yet
           if (infowindow.marker != marker){
             infowindow.marker = marker;
-            
             location = foursquare(marker);
-            infowindow.setContent('<div>'+ location.id + '</div>');
+            infowindow.setContent('<div>'+ location.location_id + '</div>');
             infowindow.open(map,marker);
             //make sure marker closes on close
             infowindow.addListener('closeclick',function(){
@@ -138,14 +138,17 @@ client_secret='Q1C5LMJZ0KOQJKGKDJB4UKVC5FURTRJ1O4J3WXPZ4MXG2XW5';
 function foursquare(marker){
 
   var location =[];
-
+  var lat = marker.getPosition().lat();
+  var lng = marker.getPosition().lng();
+  
   URL = 'https://api.foursquare.com/v2/venues/search';
-  URL =+ '?client_id=' + client_id;
-  URL =+ '&client_secret=' + client_secret;
-  URL =+ '&ll=' + marker.position[0] + ',' + marker.position[1]; 
-  URL =+ '&query=' + marker.name;
-  URL =+ '&v=20180306'
+  URL += '?client_id=' + client_id;
+  URL += '&client_secret=' + client_secret;
+  URL += '&ll=' + lat + ',' + lng; 
+  URL += '&query=' + marker.name;
+  URL += '&v=20180306'
 
+  console.log(URL);
 
   $.getJSON(URL).done(function(data) {
     var results = data.response.venues[0];
