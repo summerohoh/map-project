@@ -146,18 +146,15 @@ function foursquare(marker){
   URL += '&client_secret=' + client_secret;
   URL += '&ll=' + lat + ',' + lng; 
   URL += '&query=' + marker.name;
-  URL += '&v=20180306'
+  URL += '&v=20180306';
 
-  console.log(URL);
-
-  $.getJSON(URL).done(function(data) {
-    var results = data.response.venues[0];
-    location = [{location_id : results.id}]
+  $.getJSON(URL, function(data) {
+        console.log(data);//var results =data.response.venues;
   }).fail(function() {
     alert("Error with Foursquare API call");
   });
-
-  return location;
+  
+  
 }
 
 
