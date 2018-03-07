@@ -41,6 +41,7 @@ function ViewModel() {
 
 };
 
+
  var markers = [];
  var map;
  var bounds;
@@ -122,14 +123,14 @@ function makeInfoWindows(marker, infowindow){
           if (infowindow.marker != marker){
             infowindow.marker = marker;
             location = foursquare(marker);
-            infowindow.setContent('<div>'+ location.location_id + '</div>');
+            infowindow.setContent('<div>'+ 'hi' + '</div>');
             infowindow.open(map,marker);
             //make sure marker closes on close
             infowindow.addListener('closeclick',function(){
               infowindow.setMarker = null;
             });
           }
-}
+};
 
 // Credentials for Foursquare API 
 client_id = 'PLI5CCYKVLMH141OJGJRF1PSVAFOPOE5GKQFXXM0WTX1XOS1';
@@ -145,8 +146,10 @@ function foursquare(marker){
   URL += '?client_id=' + client_id;
   URL += '&client_secret=' + client_secret;
   URL += '&ll=' + lat + ',' + lng; 
-  URL += '&query=' + marker.name;
-  URL += '&v=20180306';
+  //URL += '&query=' + marker.name;
+  URL += '&v=20180305';
+  console.log(URL);
+
 
   $.getJSON(URL, function(data) {
     var results =data.response.venues[0];
@@ -158,7 +161,7 @@ function foursquare(marker){
   
   return location;
   
-}
+};
 
 
 ko.applyBindings(new ViewModel());
