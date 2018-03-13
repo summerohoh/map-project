@@ -5,7 +5,7 @@ $( document ).ready(function(){
 
 // close mobile list when item clicked
 	$( ".mobile-list-items" ).click(function() {
-		var mobilediv= $(this).parent().parent();
-    	mobilediv.css('display','none');
+    	$("#mobilediv").css('display','none');
 });
+
 })

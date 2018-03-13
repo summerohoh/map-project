@@ -346,7 +346,9 @@ function makeInfoWindows(marker, infowindow){
             infowindow.open(map, marker);
             //make sure marker closes on close
             infowindow.addListener('closeclick',function(){
+              infowindow.marker.setAnimation(null);
               infowindow.setMarker = null;
+              $( "li.mobile-list-items" ).removeClass("selected");
             });
           }
 };
@@ -376,14 +378,25 @@ function ViewModel() {
       //undo click if already clicked
       if (self.selectedId() == place.id){
         self.selectedId(null);
+        place.marker.setAnimation(null);
         myInfowindow.close();
       } //display infowindow
       else{self.selectedId(place.id);
+         console.log(self.selectedId());
+        for (var i = 0; i < self.list().length; i++){
+         if(self.selectedId() == self.list()[i].marker.id){
+          self.list()[i].marker.setAnimation(google.maps.Animation.BOUNCE);
+        }else{
+          self.list()[i].marker.setAnimation(null);
+        }
+           
+    };
+       
         makeInfoWindows(self.list()[place.id].marker, myInfowindow);
         map.panTo(place.location);
       };
     };
-
+    // List View and marker updated for live search 
     self.filteredLocation = ko.computed(function() {
     var search = self.query().toLowerCase();
     if (!search) {

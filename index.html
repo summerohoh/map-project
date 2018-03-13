@@ -44,7 +44,7 @@
 					<div class="collapsible-header">
 						<a id="menuicon-wrapper" data-activates="dropdown" class= "collapsible-header valign-wrapper center-align"><i id="menuicon" class="material-icons">menu</i></a>
 					</div>	
-					<div class="collapsible-body hide-on-large-only">
+					<div id="mobilediv" class="collapsible-body hide-on-large-only">
 						<ul class="list-items" data-bind="foreach:filteredLocation">
 							<li class="mobile-list-items location" data-bind="text: $data.name,
 								css: {selected: $data.id == $root.selectedId()},

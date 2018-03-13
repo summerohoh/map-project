@@ -145,17 +145,15 @@
 		-webkit-padding-start:0;
 	}
 
-	.list-items >li:hover{
-		color:#74DAAD;
-		cursor: default;
-	}
 
 	.list-items >li{
+		color:#F2F2F2;
 		line-height: 50px;
 		width: 100%;
 	}
 
-	.selected{
+
+	li.location.selected{
 		color: #74DAAD;
 	}
 
