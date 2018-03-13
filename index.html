@@ -1,37 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<title> Map Project </title>
-	<link href="css/style.css" rel="stylesheet">
-</head>
+	<head>
+		<meta charset="UTF-8">
+		<title> Map of Ithaca </title>
+		<!--Import Google Icon & Font-->
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css?family=Titillium+Web:200,300,400,500,600,700" rel="stylesheet">
+		<!--Import materialize.css-->
+		<link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+		<!--Let browser know website is optimized for mobile-->
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+		<link href="css/style.css" rel="stylesheet">
+	</head>
 
-<body>
-	<div class= topbar>
-        <input id="search" placeholder="Search Place" type="search" name="search" data-bind="value: query, valueUpdate: 'keyup'" autocomplete="off">
-    </div>
+	<body>
+		<div class="row">
+			<!--Sidebar-->
+			<div class="col s12 m12 l3 xl3" id="sidebar">
+				<div id="header" class="center-align">
+					<h4 id="page-title" class="valign-wrapper"> <i id="logo" class="material-icons left">map</i> Ithaca, NY</h4> 
+					<p id="intro">Ithaca is Gorges! <br> A personal guide of the best local spots. Built by <a class="footer-link" href="https://summerohoh.github.io/"> Summer J. Oh </a>. View code on <a class="footer-link" href="https://github.com/summerohoh/map-project"> Github </a> </p>
 
-	<div class="sidebar bar-block bar-item">
- 		<h3 id="page-title" class="bar-item">Ithaca, NY</h3>
-    <input id ="show" type="button" value="Show Marker">
-    <input id ="hide" type="button" value="Hide Marker">
- 		<ul id="list" class="list-items" data-bind="foreach:locations">
- 			<li data-bind="text: $data.name,
-                   css: {selected: $data.id == $root.selectedId()},
-                   click: $root.displaySelected"></li>
- 		</ul>
-	</div>
+					<!-- Search bar -->
+					<div id="serachbar" class="row valign-wrapper">
+					
+						<div class="input-field col s10 m8 l12 offset-s1 offset-m2">
+							<input id="search" placeholder="Search Place" type="search" name="search" data-bind="value: query, valueUpdate: 'keyup'" autocomplete="off" >
+							<i id="searchicon" class="material-icons right">search</i>
+						</div>
+					</div>
+				</div>
+				<!--List handled by Knockout.js-->
+				<ul id="list" class="list-items wave-effect hide-on-med-and-down" data-bind="foreach:filteredLocation">
+					<li class="location" data-bind="text: $data.name,
+					css: {selected: $data.id == $root.selectedId()},
+					click: $root.displaySelected">   	
+					</li>
+				</ul>		
+			</div>
 
-	<div class="map-container">
-		<div id="map"></div>
-	</div>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC5zcCfVaX_6QWbku4YXLaHhCfhMDGNndA&v=3&callback=initMap"></script>
-	<script src="js/knockout-3.4.2.js"> </script>
-	<script src="js/map.js"> </script>
+			<ul class="collapsible hide-on-large-only" data-collapsible="accordion">
+				<li>
+					<div class="collapsible-header">
+						<a id="menuicon-wrapper" data-activates="dropdown" class= "collapsible-header valign-wrapper center-align"><i id="menuicon" class="material-icons">menu</i></a>
+					</div>	
+					<div class="collapsible-body hide-on-large-only">
+						<ul class="list-items" data-bind="foreach:filteredLocation">
+							<li class="mobile-list-items location" data-bind="text: $data.name,
+								css: {selected: $data.id == $root.selectedId()},
+								click: $root.displaySelected">   	
+							</li>
+						</ul>
+					</div>
+				</li>
+			</ul>
 
-
-</body>
+			<!-- Map Display-->
+			<div class="col s12 m12 l9 offset-l3 offset-xl3" id="map-container">
+				<div id="map"></div>
+			</div>
+		</div>
+		
+		<!--Import Javascript files-->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<script async async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC5zcCfVaX_6QWbku4YXLaHhCfhMDGNndA&v=3&callback=initMap"></script>
+		<script type="text/javascript" src="js/materialize.min.js"></script>
+		<script src="js/app.js"> </script>
+		<script src="js/knockout-3.4.2.js"> </script>
+		<script src="js/map.js"> </script>
+	
+	</body>
 </html>
-
-

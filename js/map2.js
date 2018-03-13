@@ -15,9 +15,12 @@ var locations = [
           {id:12, name: 'Waffle Frolick', location: {lat: 42.439759, lng: -76.497395}}
         ];
 
+
+ var markers=[];
  var map;
  var bounds;
  var myInfowindow;
+
 
 function initMap() {
 
@@ -212,65 +215,59 @@ function initMap() {
 
     myInfowindow = new google.maps.InfoWindow({maxWidth:400});
     bounds = new google.maps.LatLngBounds();
-    // create markers for all locations initially 
     for (var i = 0; i < locations.length; i++){
           var position = locations[i].location;
           var name = locations[i].name;
           createMarker(position, name, i);
-    };
-
-  ko.applyBindings(new ViewModel());
-
+  };
 };
 
-// create a marker for given location
 function createMarker(position,name, i){
-      
-    var marker = new google.maps.Marker({
+          //create a marker for location
+          var marker = new google.maps.Marker({
                position: position,
                map: map,
                name: name,
                animation: google.maps.Animation.DROP,
                id: i,
              });
-
-    locations[i].marker = marker;
-
-    //handle click on marker
-    marker.addListener('click', function(){
-            //make and open infowindow
+          
+          //make infowindow for each markers
+          marker.addListener('click', function(){
             makeInfoWindows(this, myInfowindow);
-            //highlight selected item on the list
-            var thisli = $('li.location:contains("' +marker.name +'")');
-            if ($(window).width()>600){ //tablet and below
-              thisli[0].click();
-            }else{ // desktop
-              thisli[1].click();
-            }
+            map.setCenter(marker.position);
           });
 
-    //extend the bounds for new marker
-    bounds.extend(marker.position);
-    map.fitBounds(bounds);
-};
+          //extend the bounds for new marker
+          bounds.extend(marker.position);
+          map.fitBounds(bounds);
+        };
 
+
+function showMarkers(markers){
+          var bounds = new google.maps.LatLngBounds();
+          for (var i=0; i<markers.length; i++){
+            markers[i].setMap(map);
+            bounds.extend(markers[i].position);
+          }
+          map.fitBounds(bounds);
+        };
 
 // Credentials for Foursquare API 
-var CLIENT_ID = 'XLI5CCYKVLMH141OJGJRF1PSVAFOPOE5GKQFXXM0WTX1XOS1';
+
+var CLIENT_ID = 'PLI5CCYKVLMH141OJGJRF1PSVAFOPOE5GKQFXXM0WTX1XOS1';
 var CLIENT_SECRET = 'Q1C5LMJZ0KOQJKGKDJB4UKVC5FURTRJ1O4J3WXPZ4MXG2XW5';
 var version = '20180306';
 
 function makeInfoWindows(marker, infowindow){
+          //make sure the infowindow is not open yet
 
           var lat = marker.getPosition().lat();
           var lng = marker.getPosition().lng();
           var url = "https://api.foursquare.com/v2/venues";
 
-          //make sure the infowindow is not open yet
           if (infowindow.marker != marker){
             infowindow.marker = marker;
-            //make asyncronous request for Foursquare API
-            //request query search first 
             $.ajax({
               url: url + '/search?',
               dataType: 'json',
@@ -281,7 +278,7 @@ function makeInfoWindows(marker, infowindow){
                 ll:lat+','+lng,
                 query:marker.name,
                 async: true
-              }, //once venue ID is found, request venue search
+              },
               success: function(searchdata) {
                   result = searchdata['response']['venues'][0];
                   location_id = result.id;
@@ -295,8 +292,8 @@ function makeInfoWindows(marker, infowindow){
                     async: true
                   },
                   success: function(venuedata) {
-                  //store necessary data
                   result = venuedata['response']['venue'];
+                  console.log(result.location);
                   result_Address = result.location.formattedAddress;
                   photo_item = result.photos.groups[0].items[0]
                   photoURL = photo_item.prefix+'150x150'+photo_item.suffix;
@@ -304,43 +301,35 @@ function makeInfoWindows(marker, infowindow){
                   tip2 = result.tips.groups[0].items[1];
                   user_photo1= tip1.user.photo.prefix +'36x36'+ tip1.user.photo.suffix;
                   user_photo2= tip2.user.photo.prefix +'36x36'+ tip2.user.photo.suffix;
-                  // display photo, title, category and address of the location
+                  console.log(user_photo2)
+                  
                   content ='<div class="info-container">';
                   content +='<div class="row content">' 
-                  content +='<div class="col s5 m5 l6 img-container"><img class="location-img" src="'+ photoURL+'"> </div>';
-                  content +='<div class="col s7 m7 l6 location-info"><p class="location-name">'+ result.name+ '</p>';
+                  content +='<div class="col l6 img-container"><img class="location-img" src="'+ photoURL+'"> </div>';
+                  content +='<div class="col l6 location-info"><p class="location-name">'+ result.name+ '</p>';
                   content +='<a class="btn location-category">'+result.categories[0].name+ '</a>';
                   content +='<p class="location-address"><i id="locationicon" class="material-icons">place</i>'+ result_Address[0] +'<br>'+ result_Address[1] +'</p> </div> </div>';
                   content +='<hr><div class="row content">' ;
-                  // display either description or user tips
+                  
                   if (result.description){ 
-                    content +='<p class="description-type"> Description </p>';
-                    content +='<div class="col l12"> <p class="location-description">'+ result.description+ '</p></div><br>';
+                  content +='<p class="description-type"> Description </p>';
+                  content +='<div class="col l12"> <p class="location-description">'+ result.description+ '</p></div><br>';
                   }else { //If description is not available, display two user tips instead. 
-                    content +='<p class="description-type"> Tips </p>';
-                    content +='<div class="col l12 location-tip valign-wrapper">';
-                    content +='<div class="col l2"> <img class="tip-user circle" src="'+ user_photo1 +'"></div>';
-                    content +='<div class="col l10"> <p class="location-tip">"'+ tip1.text + '"</p></div></div>';
-                    content +='<div class="col l12 location-tip valign-wrapper">';
-                    content +='<div class="col l2"> <img class="tip-user circle" src="'+ user_photo2 +'"></div>';
-                    content +='<div class="col l10"> <p class="location-tip">"'+ tip2.text + '"</p></div></div>';
+                  content +='<p class="description-type"> Tips </p>';
+                  content +='<div class="col l12 location-tip valign-wrapper">';
+                  content +='<div class="col l2"> <img class="tip-user circle" src="'+ user_photo1 +'"></div>';
+                  content +='<div class="col l10"> <p class="location-tip">"'+ tip1.text + '"</p></div></div>';
+                  content +='<div class="col l12 location-tip valign-wrapper">';
+                  content +='<div class="col l2"> <img class="tip-user circle" src="'+ user_photo2 +'"></div>';
+                  content +='<div class="col l10"> <p class="location-tip">"'+ tip2.text + '"</p></div></div>';
                   };
+                  
                   content +='</div>'
-                  // display Foursquare  
-                  content +='<div class="col l12 infofooter">';
-                  content +='<a href="https://foursquare.com/v/' +result.id + '">';
-                  content +='<img src="./img/Powered-by-Foursquare-one-color-300.png"></a> </div> ';
+                  content +='<div class="col l12 infofooter"><img src="./img/Powered-by-Foursquare-one-color-300.png"> </div>';
                   infowindow.setContent(content); 
               } 
             });
-            }, // Error handling for Foursquare API
-            error: function(e){
-              content ='<p class="error">';
-              content += 'Data could not be loaded from Foursquare. <br>' ;
-              content += 'Error status: ' + e.status;
-              content += '</p>';
-              infowindow.setContent(content); 
-            }    
+            }     
           });
 
             infowindow.open(map, marker);
@@ -351,52 +340,39 @@ function makeInfoWindows(marker, infowindow){
           }
 };
 
-
-var Loc = function(data) {
-  this.id= data.id;
-  this.name = data.name;
-  this.location = data.location;
-  this.marker = data.marker;
-};
-
 /*** VIEW MODEL ***/
 
 function ViewModel() {
 
     var self = this;
     self.selectedId = ko.observable();
-    self.query= ko.observable('');
-    self.list = ko.observableArray();
-    locations.forEach(function(location) {
-    self.list.push(new Loc(location))
-  });
+    self.selectedData = ko.observable();
 
-    // Display infowindow when location on list is clicked 
+    // Show inbox by default
+    self.query= ko.observable('');
+
+    // Behaviours
     self.displaySelected = function(place) {
       //undo click if already clicked
       if (self.selectedId() == place.id){
         self.selectedId(null);
+        showAllMarkers();
         myInfowindow.close();
-      } //display infowindow
-      else{self.selectedId(place.id);
-        makeInfoWindows(self.list()[place.id].marker, myInfowindow);
+      } //display selected place's marker only
+      else{ self.selectedId(place.id);
+        makeInfoWindows(locations.id, myInfowindow);
         map.panTo(place.location);
       };
     };
 
-    self.filteredLocation = ko.computed(function() {
-    var search = self.query().toLowerCase();
-    if (!search) {
-      ko.utils.arrayForEach(self.list(), function (place) {
-        place.marker.setVisible(true);
-      });
-      return self.list();
-    } else {
-      return ko.utils.arrayFilter(self.list(), function(place) {
-        var result = (place.name.toLowerCase().search(search) >= 0)
-        place.marker.setVisible(result);
-        return result;
-      });
-    }
-  });
+    //only show searched locations using Knockout arrayFilter function  
+    self.locations = ko.dependentObservable(function() {
+        return ko.utils.arrayFilter(locations, function(place) {
+          var search = self.query().toLowerCase();
+            return place.name.toLowerCase().indexOf(search) >=0;
+        });
+    });
+
 };
+
+ko.applyBindings(new ViewModel());
