@@ -17,6 +17,8 @@
 
 ## Installation ##
 
+To run the application locally: 
+
 #### 1. Clone this repo
     git clone https://github.com/summerohoh/map-project.git
 
