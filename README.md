@@ -15,6 +15,13 @@
  * **MVVM Code Structure**: Code follows an MVVM pattern based upon Knockout best practices. 
  * **Interface Design**: Built with materialize.js, the app is fully responsive and usable across modern desktop, tablet, and phone browsers. 
 
+## Installation ##
+
+#### 1. Clone this repo
+    git clone https://github.com/summerohoh/map-project.git
+
+#### 2. Open index.html file
+
 ## References 
 
  * Udacity - Full Stack Developer Nanodegree
