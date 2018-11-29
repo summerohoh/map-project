@@ -12,7 +12,12 @@ var locations = [
           {id:9, name: 'Stewart Park', location: {lat: 42.461327, lng: -76.505408}},
           {id:10, name: 'Beebe Lake', location: {lat: 42.451010, lng: -76.476190}},
           {id:11, name: 'Gimme Coffee', location: {lat: 42.439456, lng: -76.506456}},
-          {id:12, name: 'Waffle Frolick', location: {lat: 42.439759, lng: -76.497395}}
+          {id:12, name: 'Balch Hall', location: {lat: 42.4531711, lng: -76.479977299}},
+          {id:13, name: 'Cascadilla Gorge', location: {lat: 42.4433792, lng: -76.490006}},
+          {id:14, name: 'Ithaca Commons', location: {lat: 42.439759, lng: -76.497395}},
+          {id:15, name: 'Hai Hong', location: {lat: 42.441739, lng: -76.48462}},
+          {id:16, name: 'Libe Slope', location: {lat: 42.448602, lng: -76.486311}},
+          {id:17, name: "Tamarind", location: {lat: 42.443323, lng: -76.5082}}
         ];
 
  var map;
@@ -212,7 +217,7 @@ function initMap() {
 
     myInfowindow = new google.maps.InfoWindow({maxWidth:400});
     bounds = new google.maps.LatLngBounds();
-    // create markers for all locations initially 
+    // create markers for all locations initially
     for (var i = 0; i < locations.length; i++){
           var position = locations[i].location;
           var name = locations[i].name;
@@ -225,7 +230,7 @@ function initMap() {
 
 // create a marker for given location
 function createMarker(position,name, i){
-      
+
     var marker = new google.maps.Marker({
                position: position,
                map: map,
@@ -255,7 +260,7 @@ function createMarker(position,name, i){
 };
 
 
-// Credentials for Foursquare API 
+// Credentials for Foursquare API
 var CLIENT_ID = 'PLI5CCYKVLMH141OJGJRF1PSVAFOPOE5GKQFXXM0WTX1XOS1';
 var CLIENT_SECRET = 'Q1C5LMJZ0KOQJKGKDJB4UKVC5FURTRJ1O4J3WXPZ4MXG2XW5';
 var version = '20180306';
@@ -270,7 +275,7 @@ function makeInfoWindows(marker, infowindow){
           if (infowindow.marker != marker){
             infowindow.marker = marker;
             //make asyncronous request for Foursquare API
-            //request query search first 
+            //request query search first
             $.ajax({
               url: url + '/search?',
               dataType: 'json',
@@ -298,25 +303,30 @@ function makeInfoWindows(marker, infowindow){
                   //store necessary data
                   result = venuedata['response']['venue'];
                   result_Address = result.location.formattedAddress;
-                  photo_item = result.photos.groups[0].items[0]
-                  photoURL = photo_item.prefix+'150x150'+photo_item.suffix;
+                  photoURL = result.bestPhoto.prefix+'150x150'+result.bestPhoto.suffix;
                   tip1 = result.tips.groups[0].items[0];
                   tip2 = result.tips.groups[0].items[1];
-                  user_photo1= tip1.user.photo.prefix +'36x36'+ tip1.user.photo.suffix;
-                  user_photo2= tip2.user.photo.prefix +'36x36'+ tip2.user.photo.suffix;
+                  if (tip1){
+                    user_photo1= tip1.user.photo.prefix +'36x36'+ tip1.user.photo.suffix;
+                  }else{
+                    console.log("BOO");
+                  }
+                  if (tip2){
+                    user_photo2= tip2.user.photo.prefix +'36x36'+ tip2.user.photo.suffix;
+                  }
                   // display photo, title, category and address of the location
                   content ='<div class="info-container">';
-                  content +='<div class="row content">' 
+                  content +='<div class="row content">'
                   content +='<div class="col s5 m5 l6 img-container"><img class="location-img" src="'+ photoURL+'"> </div>';
                   content +='<div class="col s7 m7 l6 location-info"><p class="location-name">'+ result.name+ '</p>';
                   content +='<a class="btn location-category">'+result.categories[0].name+ '</a>';
                   content +='<p class="location-address"><i id="locationicon" class="material-icons">place</i>'+ result_Address[0] +'<br>'+ result_Address[1] +'</p> </div> </div>';
                   content +='<hr><div class="row content">' ;
                   // display either description or user tips
-                  if (result.description){ 
+                  if (result.description){
                     content +='<p class="description-type"> Description </p>';
                     content +='<div class="col l12"> <p class="location-description">'+ result.description+ '</p></div><br>';
-                  }else { //If description is not available, display two user tips instead. 
+                  }else if(tip1 && tip2){ //If description is not available, display two user tips instead.
                     content +='<p class="description-type"> Tips </p>';
                     content +='<div class="col l12 location-tip valign-wrapper">';
                     content +='<div class="col l2"> <img class="tip-user circle" src="'+ user_photo1 +'"></div>';
@@ -326,12 +336,12 @@ function makeInfoWindows(marker, infowindow){
                     content +='<div class="col l10"> <p class="location-tip">"'+ tip2.text + '"</p></div></div>';
                   };
                   content +='</div>'
-                  // display Foursquare  
+                  // display Foursquare
                   content +='<div class="col l12 infofooter">';
                   content +='<a href="https://foursquare.com/v/' +result.id + '">';
                   content +='<img src="./img/Powered-by-Foursquare-one-color-300.png"></a> </div> ';
-                  infowindow.setContent(content); 
-              } 
+                  infowindow.setContent(content);
+              }
             });
             }, // Error handling for Foursquare API
             error: function(e){
@@ -339,8 +349,8 @@ function makeInfoWindows(marker, infowindow){
               content += 'Data could not be loaded from Foursquare. <br>' ;
               content += 'Error status: ' + e.status;
               content += '</p>';
-              infowindow.setContent(content); 
-            }    
+              infowindow.setContent(content);
+            }
           });
 
             infowindow.open(map, marker);
@@ -373,7 +383,7 @@ function ViewModel() {
     self.list.push(new Loc(location))
   });
 
-    // Display infowindow when location on list is clicked 
+    // Display infowindow when location on list is clicked
     self.displaySelected = function(place) {
       //undo click if already clicked
       if (self.selectedId() == place.id){
@@ -382,21 +392,20 @@ function ViewModel() {
         myInfowindow.close();
       } //display infowindow
       else{self.selectedId(place.id);
-         console.log(self.selectedId());
         for (var i = 0; i < self.list().length; i++){
          if(self.selectedId() == self.list()[i].marker.id){
           self.list()[i].marker.setAnimation(google.maps.Animation.BOUNCE);
         }else{
           self.list()[i].marker.setAnimation(null);
         }
-           
+
     };
-       
+
         makeInfoWindows(self.list()[place.id].marker, myInfowindow);
         map.panTo(place.location);
       };
     };
-    // List View and marker updated for live search 
+    // List View and marker updated for live search
     self.filteredLocation = ko.computed(function() {
     var search = self.query().toLowerCase();
     if (!search) {
